@@ -3,7 +3,7 @@
   <img align="left" height="160em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MaxWolf-01&exclude_repo=TinfProject-2nd-Semester&theme=dark&layout=compact&count_private=true" />
 </div>
 
-<br><br><br><br><br><br><br><br>
+
 
 
 
