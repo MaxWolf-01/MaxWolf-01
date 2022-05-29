@@ -1,5 +1,5 @@
 <div align="center">
-  <img
+  <img width="50%"
     src="https://github-readme-stats.vercel.app/api?username=MaxWolf-01&show_icons=true&theme=dark&count_private&=true&include_all_commits=true&style=for-the-badge"
   />
   <img
