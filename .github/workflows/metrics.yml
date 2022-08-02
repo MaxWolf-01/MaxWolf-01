@@ -20,7 +20,7 @@ jobs:
           plugin_languages_ignored: html, css, php, Hack
           plugin_languages_details: bytes-size, percentage, lines
           plugin_languages_skipped: lowlighter/metrics
-          commits_authoring: maximilianwolf.0412@gmail.com, maximilian.wolf@ondewo.com
+          commits_authoring: MaxWolf-01, maximilianwolf.0412@gmail.com, maximilian.wolf@ondewo.com, Maximilian Wolf, =
 
 
 #  https://github.com/lowlighter/metrics/blob/master/source/plugins/stackoverflow/README.md
