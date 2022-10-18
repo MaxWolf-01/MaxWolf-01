@@ -15,14 +15,14 @@ jobs:
       - uses: lowlighter/metrics@latest
         with:
           token: ${{ secrets.METRICS_TOKEN }}
-#          plugin_languages: yes
-#          plugin_languages_indepth: yes
-#          plugin_languages_ignored: html, css, php, Hack
-#          plugin_languages_details: bytes-size, percentage, lines
-#          plugin_languages_analysis_timeout: 30
-#          plugin_languages_sections: most-used
-#          plugin_languages_categories: data, markup, programming, prose
-#          commits_authoring: MaxWolf-01, maximilianwolf.0412@gmail.com, maximilian.wolf@ondewo.com, Maximilian Wolf, =
+          plugin_languages: yes
+          plugin_languages_indepth: yes
+          plugin_languages_ignored: html, css, php, Hack
+          plugin_languages_details: bytes-size, percentage, lines
+          plugin_languages_analysis_timeout: 30
+          plugin_languages_sections: most-used
+          plugin_languages_categories: data, markup, programming, prose
+          commits_authoring: MaxWolf-01, maximilianwolf.0412@gmail.com, maximilian.wolf@ondewo.com, Maximilian Wolf, =
 
 
 #  https://github.com/lowlighter/metrics/blob/master/source/plugins/stackoverflow/README.md
