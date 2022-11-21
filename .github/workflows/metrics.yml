@@ -1,6 +1,6 @@
 name: Metrics
 on:
-  # Schedule daily updates
+  # Runs every Monday 0:0 UTC
   schedule: [{cron: "0 0 * * 1"}]
   # (optional) Run workflow manually
   workflow_dispatch:
@@ -17,7 +17,7 @@ jobs:
           token: ${{ secrets.METRICS_TOKEN }}
           plugin_languages: yes
           plugin_languages_indepth: yes
-          plugin_languages_ignored: html, css, php, Hack
+          plugin_languages_ignored: html, css, php, Hack, HAProxy, CSV
           plugin_languages_details: bytes-size, percentage, lines
           plugin_languages_analysis_timeout: 30
           plugin_languages_sections: most-used
