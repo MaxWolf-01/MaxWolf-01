@@ -17,7 +17,7 @@ Below are my paper implementations and highlighted projects.
 |-|-|-|
 |[dotfiles](https://github.com/MaxWolf-01/dotfiles)|Config files, utility scripts, ...|[![Neovim](https://img.shields.io/badge/Neovim-57A143?logo=neovim&logoColor=fff)](#) ![](https://img.shields.io/badge/Shell-4EAA25?&style=plastic&logo=gnu-bash&logoColor=white) [![Zsh](https://img.shields.io/badge/Zsh-F15A24?logo=zsh&logoColor=fff)](#) [![Lua](https://img.shields.io/badge/Lua-%232C2D72.svg?logo=lua&logoColor=white)](#) |
 |[Obsidian Homepage](https://gist.github.com/MaxWolf-01/6ecd0ef197fc239bca818a4266f0cb17)|Personal-stats visualization from Obsidian daily-note metadata|![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000) ![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?logo=chartdotjs&logoColor=fff) ![Obsidian](https://img.shields.io/badge/Obsidian-%23483699.svg?&logo=obsidian&logoColor=white)|
-
+|[aleator](https://github.com/MaxWolf-01/aleator)|RNG-based habit formation app. | [![Website](https://img.shields.io/badge/aleatoric.agency-4A5568?style=flat&logo=firefox&logoColor=white)](https://aleatoric.agency) [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](#) [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](#) [![FastAPI](https://img.shields.io/badge/FastAPI-005571?logo=fastapi)](#) [![Claude](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff)](#)|
 
 <details>
 <summary>High School Projects</summary>
