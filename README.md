@@ -1,8 +1,15 @@
-Hi, I'm Max, a 20y/o independent researcher working on intelligent agents. Currently, my research focuses on self-organizing multi-agent systems, ranging from biologically inspired networks to sequence modelling with memory augmentation.
+Hey, I'm Max, AI student at JKU Linz working on biologically-inspired neural architectures.
 
-On my [personal website](https://mwolf.dev/)/knowledge-base, you will find notes on papers and concepts I'm currently learning about.
+I'm interested in how intelligence emerges from simple components - cells self-organizing into adaptive networks that learn, communicate, and remember. Drawing ideas from artificial life, neuroevolution, and developmental biology, I try to find the minimal ingredients for continual learning and open-ended discovery.
 
-Below are my paper implementations and highlighted projects.
+Currently exploring:
+- Self-organizing neural architectures with learned dynamic connectivity
+- Meta-learning where shared parameters define how neurons communicate while their context determines their role
+- Automated curricula optimizing task diversity and learning potential via LLM-guided exploration
+
+On my website [mwolf.dev](https://mwolf.dev/), you'll find detailed notes and thoughts (major updates coming soon).
+
+Below are highlighted projects and paper implementations.
 
 <h5 align="center">Paper Replicas</h5>
 
@@ -10,6 +17,7 @@ Below are my paper implementations and highlighted projects.
 |-|-|-|
 |[es-torch](https://github.com/neuro-soup/es-torch)|[Evolution Strategies as a Scalable Alternative to Reinforcement Learning](https://arxiv.org/abs/1703.03864)|✅|
 |[multi-agent-transformer](https://github.com/neuro-soup/multi-agent-transformer)|[Multi-Agent Reinforcement Learning is a Sequence Modeling Problem](https://arxiv.org/abs/2205.14953)|🚧|
+|[LNDP](https://github.com/MaxWolf-01/LNDP)|[Evolving Self-Assembling Neural Networks: From Spontaneous Activity to Experience-Dependent Learning](https://arxiv.org/abs/2406.09787)|🚧|
 
 <h5 align="center">Misc</h5>
 
