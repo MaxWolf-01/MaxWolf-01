@@ -14,6 +14,7 @@ Highlighted AI/ML projects:
 |Project|Description|Info|
 |-|-|-|
 |[OMNI-X](https://github.com/MaxWolf-01/omni-x)|Minimal interface and a collection of composable building blocks for running the [OMNI-EPIC](https://arxiv.org/abs/2405.15568) algorithm on any domain.|🚧🔜|
+|[NEAT](https://github.com/MaxWolf-01/neat)| NEAT algorithm in pure python |✅|
 |[LNDP](https://github.com/MaxWolf-01/LNDP)| PyTorch paper replica of [Evolving Self-Assembling Neural Networks: From Spontaneous Activity to Experience-Dependent Learning](https://arxiv.org/abs/2406.09787)|☑️|
 |[multi-agent-transformer](https://github.com/neuro-soup/multi-agent-transformer)| Explorations into [Multi-Agent Reinforcement Learning is a Sequence Modeling Problem](https://arxiv.org/abs/2205.14953)|☑️|
 |[es-torch](https://github.com/neuro-soup/es-torch)| A lightweight PyTorch implementation of [OpenAI-ES](https://arxiv.org/abs/1703.03864), combined with a custom distributed training orchestrator. |✅|
