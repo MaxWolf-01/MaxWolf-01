@@ -13,6 +13,7 @@ AI / ML:
 
 |Project|Description|Info|
 |-|-|-|
+|[grax](https://github.com/MaxWolf-01/omni-x)|Toy impl + viz of [Graph Rewriting Automata](https://arxiv.org/abs/2211.13619) in jax |✅|
 |[OMNI-X](https://github.com/MaxWolf-01/omni-x)|Minimal interface and a collection of composable building blocks for running the [OMNI-EPIC](https://arxiv.org/abs/2405.15568) algorithm on any domain.|🚧🔜|
 |[NEAT](https://github.com/MaxWolf-01/neat)| NEAT algorithm in pure python |✅|
 |[multi-agent-transformer](https://github.com/neuro-soup/multi-agent-transformer)| Explorations into [Multi-Agent Reinforcement Learning is a Sequence Modeling Problem](https://arxiv.org/abs/2205.14953)|☑️|
