@@ -12,8 +12,8 @@
 ┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/neat">NEAT</a></span>                     - neuroevolution in pure Python
 ┃   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/omni-x">OMNI-X</a></span>                   - composable building blocks for OMNI-EPIC (wip)
 ┃   ┣━━ 2024
-┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/neuro-soup/multi-agent-transformer">multi-agent-transformer</a></span>  - multi-agent RL as sequence modeling
-┃   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/neuro-soup/es-torch">es-torch</a></span>                 - distributed Evolution Strategies in PyTorch
+┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/neuro-soup/multi-agent-transformer">multi-agent-transformer</a></span>  - multi-agent RL as sequence modeling (paper replica)
+┃   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/neuro-soup/es-torch">es-torch</a></span>                 - distributed Evolution Strategies in PyTorch (paper replica)
 ┃   ┗━━ 2023
 ┃       ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/sentinel2-landcover-classification">sentinel2-landcover</a></span>      - satellite imagery classification (diploma project)
 ┣━━ 🚀 Apps
