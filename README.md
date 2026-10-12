@@ -27,6 +27,21 @@
 ┃   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/gitplot">gitplot</a></span>     - git history visualizations <a href="https://pypi.org/project/gitplot/"><img src="https://img.shields.io/badge/PyPI-3775A9?logo=pypi&logoColor=fff" alt="PyPI"></a>
 ┃   ┗━━ 2025
 ┃       ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/memex">memex</a></span>       - semantic search + graph traversal for markdown vaults <a href="https://pypi.org/project/memex-md/"><img src="https://img.shields.io/badge/PyPI-3775A9?logo=pypi&logoColor=fff" alt="PyPI"></a>
+<details><summary>┣━━ 🤝 Open source</summary>┃   ┣━━ 2026
+┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/kepano/defuddle/pulls?q=author%3AMaxWolf-01">defuddle</a></span>                - 5 merged fixes, ~20 fixed bug reports: footnotes, code blocks, arXiv math and citations, over-eager content removal
+┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/copyous">copyous</a></span> (fork)          - GNOME clipboard manager: unlock 11× faster at 500 entries, image-preview leak 766 → 7 MiB
+┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/thedotmack/claude-mem/issues/646">claude-mem</a></span>              - reported a plugin crash that made Claude Code unusable (fixed)
+┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/NixOS/nixpkgs/issues/500852">nixpkgs</a></span>                 - reported pihole-ftl-setup failing to add blocklists (fixed)
+┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/boxed/mutmut/issues/578">mutmut</a></span>                  - reported async tests recorded as timeouts under fork-per-mutant (fixed)
+┃   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/Jotham-LEC/greyline/issues/13">greyline</a></span>                - reported the Home Manager module breaking the command backend (fixed)
+┃   ┣━━ 2025
+┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/lucidrains/x-transformers/pull/307">x-transformers</a></span>          - fix inp_inject being ignored together with in_attn_cond
+┃   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/PrimeIntellect-ai/verifiers/issues/327">verifiers</a></span>               - reported RubricGroup ignoring per-rubric parsers (fixed)
+┃   ┣━━ 2024
+┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/tinygrad/tinygrad/pull/3621">tinygrad</a></span>                - Tensor.inference_mode() context manager/decorator; failing test that surfaced a cross-backend setitem bug
+┃   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/Pierrad/obsidian-github-copilot/issues/36">obsidian-github-copilot</a></span> - reported a forced daily re-sign-in (fixed)
+┃   ┗━━ 2022
+┃       ┗━━ <span style="font-weight: bold"><a href="https://github.com/nagadit/DeepFaceLab_Linux/pull/68">DeepFaceLab_Linux</a></span>       - added export scripts</details>
 ┗━━ 🎲 Random/Fun
     ┣━━ <span style="font-weight: bold"><a href="https://gist.github.com/MaxWolf-01/6ecd0ef197fc239bca818a4266f0cb17">Obsidian Homepage</a></span>  - daily-note stats visualization <a href="#"><img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000" alt="JavaScript"></a> <a href="#"><img src="https://img.shields.io/badge/Obsidian-%23483699.svg?&logo=obsidian&logoColor=white" alt="Obsidian"></a>
     ┣━━ 2025
