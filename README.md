@@ -5,7 +5,7 @@
 
 <pre>
 <a href="https://mwolf.dev">Max Wolf</a>
-<details><summary>┣━━ 🧠 AI / ML</summary>┃   ┣━━ 2025
+<details open><summary>┣━━ 🧠 AI / ML</summary>┃   ┣━━ 2025
 ┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/grax">grax</a></span>                     - Graph Rewriting Automata in JAX
 ┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/LNDP">LNDP</a></span>                     - evolving self-assembling neural networks (paper replica)
 ┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/neat">NEAT</a></span>                     - neuroevolution in pure Python
