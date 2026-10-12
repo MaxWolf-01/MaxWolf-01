@@ -77,8 +77,6 @@ class Args:
     """The SVG to write."""
     today: str = ""
     """Treat this date (YYYY-MM-DD) as today; defaults to the real date."""
-    appear_after: float = 0.0
-    """Fade the card in this many seconds after it loads, when the README's prompts type their commands out; 0 shows it at once."""
 
 
 # ---------------------------------------------------------------- fetch
@@ -360,14 +358,6 @@ def stylesheet(text: str) -> str:
             f".h {{ font-weight: 500 }} {rules(0)} @media (prefers-color-scheme: dark) {{ {rules(1)} }}")
 
 
-def fade_in(after: float) -> str:
-    if not after:
-        return ""
-    return (f" @keyframes appear {{ from {{ opacity: 0 }} to {{ opacity: 1 }} }}"
-            f" svg {{ animation: appear 0.6s ease-out {after:.2f}s both }}"
-            " @media (prefers-reduced-motion: reduce) { svg { animation: none } }")
-
-
 def font_face(path: Path, weight: int, text: str) -> str:
     """A @font-face holding only the glyphs the card uses, as inline woff2."""
     font = TTFont(path)
@@ -402,12 +392,12 @@ class Canvas:
         d = f' stroke-dasharray="{dash}"' if dash else ""
         self.add(f'<line x1="{x1:.1f}" x2="{x2:.1f}" y1="{y:.1f}" y2="{y:.1f}" class="{cls}" stroke-width="1"{d}/>')
 
-    def svg(self, w: int, h: int, title: str, appear_after: float = 0.0) -> str:
+    def svg(self, w: int, h: int, title: str) -> str:
         body = "\n".join(self.parts)
         text = html.unescape("".join(re.findall(r">([^<]*)</text>", body)))
         return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" '
                 f'role="img" aria-label="{escape(title)}"><title>{escape(title)}</title>'
-                f"<style>{stylesheet(text)}{fade_in(appear_after)}</style>\n{body}\n</svg>\n")
+                f"<style>{stylesheet(text)}</style>\n{body}\n</svg>\n")
 
 
 # The card sits inside the README's <pre>, which pads its content; a wider card is scaled down to fit.
@@ -583,20 +573,19 @@ def recent(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     return y
 
 
-def render(d: dict, today: dt.date, appear_after: float = 0.0) -> str:
+def render(d: dict, today: dt.date) -> str:
     c = Canvas()
     y = activity(c, d, today, 18)
     y = summary(c, d, today, y + SECTION_GAP)
     y = recent(c, d, today, y + SECTION_GAP)
-    return c.svg(W, math.ceil(y + 12), "Max's GitHub activity: per month since 2020, a summary, and the last 90 days",
-                 appear_after)
+    return c.svg(W, math.ceil(y + 12), "Max's GitHub activity: per month since 2020, a summary, and the last 90 days")
 
 
 def main(args: Args):
     today = dt.date.fromisoformat(args.today) if args.today else dt.date.today()
     if args.refresh or not args.cache.exists():
         args.cache.write_text(json.dumps(fetch(today)))
-    args.out.write_text(render(json.loads(args.cache.read_text()), today, args.appear_after))
+    args.out.write_text(render(json.loads(args.cache.read_text()), today))
     print(args.out)
 
 
