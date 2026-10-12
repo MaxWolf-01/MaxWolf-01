@@ -45,5 +45,5 @@
 </pre>
 
 <div align="center">
-  <img src="/github-metrics.svg" alt="Metrics">
+  <img src="/cards/activity.svg" alt="Max's GitHub activity: contributions per month since 2020, a summary, and the last 90 days">
 </div>
