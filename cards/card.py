@@ -397,7 +397,7 @@ class Canvas:
 
 
 W = 840
-X0, X1 = 8, W - 8  # content edges
+X0, X1 = 16, W - 16  # content edges, level with the tree's text above
 VAL = 176  # the value column of the summary and the bars of the last 90 days
 SECTION_GAP = 48
 FIRST_ROW = 30  # from a section's heading to its first row
