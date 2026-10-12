@@ -42,7 +42,9 @@ HERE = Path(__file__).parent
 LOGIN = "MaxWolf-01"
 OWN = {"MaxWolf-01", "yapit-tts", "neuro-soup"}
 WORK = {"HELFERLINE", "ondewo"}
-SCHOOL = {"Die-Spengergasse", "necoder27", "schletz"}
+SCHOOL = {"Die-Spengergasse", "tms-organization", "necoder27", "schletz"}
+# Counted with the private work, never named.
+PRIVATE = {"funke-dev"}
 # Closed as completed, but by a duplicate, a workaround or a "works as intended",
 # not by a change in the project: read by hand from each thread.
 NOT_FIXED = {
@@ -224,7 +226,7 @@ def weighted_languages(viewer_id: str, public_repos: set[str]) -> dict[str, floa
 
 def upstream(orgs: set[str]) -> tuple[list, list]:
     """Merged PRs and fixed issues in public projects outside max's namespaces, orgs, work and school."""
-    excluded = OWN | orgs | WORK | SCHOOL
+    excluded = OWN | orgs | WORK | SCHOOL | PRIVATE
 
     def search(q):
         hits, after = [], None
@@ -273,7 +275,7 @@ def fetch(today: dt.date) -> dict:
             public_contributions(data[f"m{j}"], m.strftime("%Y-%m"), public)
 
     merged, fixed = upstream(orgs)
-    public_repos = {f"{r['owner']}/{r['name']}" for r in public if r["commits"] and r["owner"] not in WORK | SCHOOL}
+    public_repos = {f"{r['owner']}/{r['name']}" for r in public if r["commits"] and r["owner"] not in WORK | SCHOOL | PRIVATE}
 
     stars, repo_count = 0, 0
     for owner in sorted(OWN):
@@ -305,13 +307,15 @@ def category(owner: str, name: str) -> str:
         return "work"
     if owner in SCHOOL:
         return "school"
+    if owner in PRIVATE:
+        return "private"
     if owner in OWN:
         return next((f for f, names in FOLDER.items() if name in names), "tools")
     return "open source"
 
 
 def nameable(owner: str) -> bool:
-    return owner not in WORK | SCHOOL
+    return owner not in WORK | SCHOOL | PRIVATE
 
 
 # ---------------------------------------------------------------- svg
@@ -396,8 +400,9 @@ class Canvas:
                 f"<style>{stylesheet(text)}</style>\n{body}\n</svg>\n")
 
 
-W = 840
-X0, X1 = 16, W - 16  # content edges, level with the tree's text above
+# The card sits inside the README's <pre>, which pads its content; a wider card is scaled down to fit.
+W = 800
+X0, X1 = 0, W
 VAL = 176  # the value column of the summary and the bars of the last 90 days
 SECTION_GAP = 48
 FIRST_ROW = 30  # from a section's heading to its first row
