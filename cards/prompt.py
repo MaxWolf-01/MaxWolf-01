@@ -53,7 +53,7 @@ INK = {  # role: (light, dark)
 }
 
 # Seconds: before the first prompt, a prompt idling before it types, per key, before enter, after output.
-START, IDLE, KEY, ENTER, NEXT = 0.6, 0.45, 0.06, 0.3, 0.2
+START, IDLE, KEY, ENTER, NEXT = 0.4, 0.2, 0.035, 0.15, 0.08
 
 
 @dataclass
