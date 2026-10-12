@@ -27,7 +27,7 @@ HERE = Path(__file__).parent
 
 # The session's commands, top to bottom: (file stem, command, the directory it names).
 COMMANDS = [
-    ("finger", "finger max", None),
+    ("pinky", "pinky -l max", None),
     *[(f"tree-{d}", f"tree {d}/", f"{d}/") for d in ("research", "apps", "tools", "open-source", "fun")],
     ("card", "uv run cards/card.py", None),
 ]
@@ -35,7 +35,7 @@ DIRS = ["research", "apps", "tools", "open-source", "fun", *map(str, range(2021,
 # What the live prompt types, in a loop.
 COMMENTS = [
     "# click a command to run it",
-    "# now: building skill tree",
+    "# cells don't have a main()",
     "# more at mwolf.dev",
 ]
 

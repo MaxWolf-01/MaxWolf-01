@@ -4,12 +4,11 @@
 </p>
 
 <pre>
-<picture><img src="/cards/term/prompt-finger.svg" alt="$ finger max" align="absbottom"></picture>
-Login: max                              Name: Max Wolf
-Directory: /home/max                    Shell: /usr/bin/zsh
-Plan:
-<a href="https://mwolf.dev">https://mwolf.dev</a>
-<details open><summary><picture><img src="/cards/term/prompt-tree-research.svg" alt="$ tree research/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-research.svg" alt="research/" align="absbottom"></picture>
+<picture><img src="/cards/term/prompt-pinky.svg" alt="$ pinky -l max" align="absbottom"></picture>
+Login name: max                         In real life:  Maximilian Wolf
+Directory: /home/max                    Shell:  /home/max/.nix-profile/bin/zsh
+Plan: <a href="https://mwolf.dev">https://mwolf.dev</a>
+<details><summary><picture><img src="/cards/term/prompt-tree-research.svg" alt="$ tree research/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-research.svg" alt="research/" align="absbottom"></picture>
   ┣━━ <picture><img src="/cards/term/dir-2025.svg" alt="2025/" align="absbottom"></picture>
   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/grax">grax</a></span>                     - Graph Rewriting Automata in JAX
   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/LNDP">LNDP</a></span>                     - evolving self-assembling neural networks (paper replica)
@@ -19,7 +18,7 @@ Plan:
   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/neuro-soup/multi-agent-transformer">multi-agent-transformer</a></span>  - multi-agent RL as sequence modeling (paper replica)
   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/neuro-soup/es-torch">es-torch</a></span>                 - distributed Evolution Strategies in PyTorch (paper replica)
   ┗━━ <picture><img src="/cards/term/dir-2023.svg" alt="2023/" align="absbottom"></picture>
-      ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/sentinel2-landcover-classification">sentinel2-landcover</a></span>      - satellite imagery classification (diploma project)</details><details open><summary><picture><img src="/cards/term/prompt-tree-apps.svg" alt="$ tree apps/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-apps.svg" alt="apps/" align="absbottom"></picture>
+      ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/sentinel2-landcover-classification">sentinel2-landcover</a></span>      - satellite imagery classification (diploma project)</details><details><summary><picture><img src="/cards/term/prompt-tree-apps.svg" alt="$ tree apps/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-apps.svg" alt="apps/" align="absbottom"></picture>
   ┗━━ <span style="font-weight: bold"><a href="https://github.com/yapit-tts/yapit">yapit</a></span>    - TTS for documents, papers, and web pages <a href="https://yapit.md"><img src="https://img.shields.io/badge/yapit.md-4A5568?style=flat&logo=firefox&logoColor=white" alt="Website"></a> <a href="#"><img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB" alt="React"></a> <a href="#"><img src="https://img.shields.io/badge/FastAPI-005571?logo=fastapi" alt="FastAPI"></a></details><details><summary><picture><img src="/cards/term/prompt-tree-tools.svg" alt="$ tree tools/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-tools.svg" alt="tools/" align="absbottom"></picture>
   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/dotfiles">dotfiles</a></span>    - system config and utility scripts <a href="#"><img src="https://img.shields.io/badge/Nix-5277C3?logo=nixos&logoColor=fff" alt="Nix"></a> <a href="#"><img src="https://img.shields.io/badge/Neovim-57A143?logo=neovim&logoColor=fff" alt="Neovim"></a> <a href="#"><img src="https://img.shields.io/badge/Zsh-F15A24?logo=zsh&logoColor=fff" alt="Zsh"></a>
   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/agents">agents</a></span>      - prompts and plugins for agents <a href="#"><img src="https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff" alt="Claude"></a> <a href="https://pi.dev"><img src="https://img.shields.io/badge/Pi-20232A?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjE2NSAxNjUgNDcwIDQ3MCI+PHBhdGggZmlsbD0iI0YwOTA4MiIgZD0iTTE2NS4yOSAxNjUuMjlINTE3LjM2VjQwMEg0MDBWMjgyLjY1SDE2NS4yOVoiLz48cGF0aCBmaWxsPSIjNEQ5QUJGIiBkPSJNMTY1LjI5IDI4Mi42NUgyODIuNjVWNDAwSDQwMFY1MTcuMzZIMjgyLjY1VjYzNC43MkgxNjUuMjlaIi8+PHBhdGggZmlsbD0iI0YxQkU1OCIgZD0iTTUxNy4zNiA0MDBINjM0LjcyVjYzNC43Mkg1MTcuMzZaIi8+PC9zdmc+Cg==" alt="Pi"></a>
