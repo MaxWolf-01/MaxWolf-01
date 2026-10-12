@@ -46,8 +46,7 @@ max@github:~$ pwd
   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/aleator">aleator</a></span>        - RNG-based habit formation app <a href="#"><img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB" alt="React"></a> <a href="#"><img src="https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white" alt="TypeScript"></a> <a href="#"><img src="https://img.shields.io/badge/FastAPI-005571?logo=fastapi" alt="FastAPI"></a>
   ┗━━ 2021/
       ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/TruthTabler">TruthTabler</a></span>    - boolean expression parser + simplifier <a href="#"><img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff" alt="Python"></a>
-      ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/2048JavaFx-Bot">2048JavaFx-Bot</a></span> - 2048 with parallel expectimax bot <a href="#"><img src="https://img.shields.io/badge/Java-%23ED8B00.svg?logo=openjdk&logoColor=white" alt="Java"></a></details>
-max@github:~$ uv run cards/card.py
+      ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/2048JavaFx-Bot">2048JavaFx-Bot</a></span> - 2048 with parallel expectimax bot <a href="#"><img src="https://img.shields.io/badge/Java-%23ED8B00.svg?logo=openjdk&logoColor=white" alt="Java"></a></details>max@github:~$ uv run cards/card.py
 <img src="/cards/activity.svg" alt="Max's GitHub activity: contributions per month since 2020, a summary, and the last 90 days">
 max@github:~$ ▌
 </pre>
