@@ -31,6 +31,7 @@ import re
 import subprocess
 import time
 from dataclasses import dataclass
+from typing import Literal
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -77,6 +78,8 @@ class Args:
     """The SVG to write."""
     today: str = ""
     """Treat this date (YYYY-MM-DD) as today; defaults to the real date."""
+    weeks: Literal["year", "year-sqrt", "all-sqrt"] = "year-sqrt"
+    """The weekly line: the past year or all time, height linear or by square root."""
 
 
 # ---------------------------------------------------------------- fetch
@@ -323,14 +326,14 @@ def nameable(owner: str) -> bool:
 LAYERS = ["research", "apps", "tools", "open source", "work", "school", "private"]
 # House inks for GitHub's light and dark grounds. Research takes the accent,
 # open source the second accent; the rest are sand and grey between them.
-LAYER_INK = {
-    "research": ("#426724", "#6ea444"),
-    "apps": ("#c2a878", "#8c7a5b"),
-    "tools": ("#9c8f80", "#655c52"),
-    "open source": ("#674806", "#cdb78a"),
-    "work": ("#5e5650", "#a39a8e"),
-    "school": ("#d9cbb7", "#574f46"),
-    "private": ("#ece2d3", "#332e29"),
+LAYER_INK = {  # hues of the ghibli terminal palette the README's prompts use, one per layer
+    "research": ("#4b7a2c", "#7fa05a"),
+    "apps": ("#2b7a8c", "#5ba5b7"),
+    "tools": ("#b08c3c", "#d4b77a"),
+    "open source": ("#a0603a", "#c8875a"),
+    "work": ("#7a5f8a", "#9c86ab"),
+    "school": ("#857245", "#8a7a52"),
+    "private": ("#e6dccb", "#3a3530"),
 }
 INK = {  # role: (light, dark)
     "muted": ("#5e5650", "#b0a89e"),
@@ -476,7 +479,7 @@ def activity(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     return dots_end + 16
 
 
-def summary(c: Canvas, d: dict, today: dt.date, y: float) -> float:
+def summary(c: Canvas, d: dict, today: dt.date, y: float, week_line: str) -> float:
     year = str(today.year)
     created = dt.date.fromisoformat(d["created"])
     all_time = sum(d["days"].values())
@@ -523,18 +526,21 @@ def summary(c: Canvas, d: dict, today: dt.date, y: float) -> float:
         x += 12 + len(label) * 6.6 + 16
     y += 30
 
-    # Contributions per week over the last 52 weeks.
-    start = today - dt.timedelta(days=52 * 7 - 1)
+    # Contributions per week, over the past year or since the account began.
+    n = 52 if week_line.startswith("year") else (today - created).days // 7 + 1
+    start = today - dt.timedelta(days=n * 7 - 1)
     weeks = [sum(d["days"].get((start + dt.timedelta(days=w * 7 + i)).isoformat(), 0) for i in range(7))
-             for w in range(52)]
-    c.text(X0, y, "per week", "muted", 12)
+             for w in range(n)]
+    c.text(X0, y, "contributions a week", "muted", 12)
     peak = max(weeks) or 1
+    height = (lambda v: math.sqrt(v / peak)) if week_line.endswith("sqrt") else (lambda v: v / peak)
     step = bar_w / (len(weeks) - 1)
-    pts = " ".join(f"{VAL + i * step:.1f},{y - 22 * v / peak:.1f}" for i, v in enumerate(weeks))
+    pts = " ".join(f"{VAL + i * step:.1f},{y - 22 * height(v):.1f}" for i, v in enumerate(weeks))
     c.hline(VAL, VAL + bar_w, y + 0.5, dash="2 3")
     c.add(f'<polyline points="{pts}" fill="none" class="s-accent" stroke-width="1.5" '
           'stroke-linejoin="round" stroke-linecap="round"/>')
-    c.text(VAL + bar_w + 14, y, f"past 52 weeks  ·  peak {peak:,}", "muted", 11)
+    span = "past year" if week_line.startswith("year") else f"since {created.year}"
+    c.text(VAL + bar_w + 14, y, f"{span}  ·  max {peak:,}", "muted", 11)
     return y
 
 
@@ -573,10 +579,10 @@ def recent(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     return y
 
 
-def render(d: dict, today: dt.date) -> str:
+def render(d: dict, today: dt.date, week_line: str = "year-sqrt") -> str:
     c = Canvas()
     y = activity(c, d, today, 18)
-    y = summary(c, d, today, y + SECTION_GAP)
+    y = summary(c, d, today, y + SECTION_GAP, week_line)
     y = recent(c, d, today, y + SECTION_GAP)
     return c.svg(W, math.ceil(y + 12), "Max's GitHub activity: per month since 2020, a summary, and the last 90 days")
 
@@ -585,7 +591,7 @@ def main(args: Args):
     today = dt.date.fromisoformat(args.today) if args.today else dt.date.today()
     if args.refresh or not args.cache.exists():
         args.cache.write_text(json.dumps(fetch(today)))
-    args.out.write_text(render(json.loads(args.cache.read_text()), today))
+    args.out.write_text(render(json.loads(args.cache.read_text()), today, args.weeks))
     print(args.out)
 
 
