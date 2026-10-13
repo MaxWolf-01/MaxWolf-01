@@ -31,7 +31,6 @@ import re
 import subprocess
 import time
 from dataclasses import dataclass
-from typing import Literal
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -78,8 +77,6 @@ class Args:
     """The SVG to write."""
     today: str = ""
     """Treat this date (YYYY-MM-DD) as today; defaults to the real date."""
-    weeks: Literal["year", "year-sqrt", "all-sqrt"] = "year-sqrt"
-    """The weekly line: the past year or all time, height linear or by square root."""
 
 
 # ---------------------------------------------------------------- fetch
@@ -335,6 +332,16 @@ LAYER_INK = {  # hues of the ghibli terminal palette the README's prompts use, o
     "school": ("#857245", "#8a7a52"),
     "private": ("#e6dccb", "#3a3530"),
 }
+# The same hues, muted, for the activity chart: a large area in a full hue drowns the rest.
+AREA_INK = {
+    "research": ("#8aa46c", "#6c8a4f"),
+    "apps": ("#86a9b1", "#4f7a84"),
+    "tools": ("#cfc09f", "#8f8264"),
+    "open source": ("#c99a78", "#a2714f"),
+    "work": ("#ab9fb8", "#76698a"),
+    "school": ("#a39a74", "#635a42"),
+    "private": ("#ebe4d8", "#332f2a"),
+}
 INK = {  # role: (light, dark)
     "muted": ("#5e5650", "#b0a89e"),
     "body": ("#37261d", "#ede3d2"),
@@ -353,6 +360,7 @@ def stylesheet(text: str) -> str:
         fills = [f".{k} {{ fill: {v[i]} }}" for k, v in INK.items()]
         fills += [f".s-{k} {{ stroke: {v[i]} }}" for k, v in INK.items()]
         fills += [f".l-{slug(k)} {{ fill: {v[i]} }}" for k, v in LAYER_INK.items()]
+        fills += [f".a-{slug(k)} {{ fill: {v[i]} }}" for k, v in AREA_INK.items()]
         return " ".join(fills)
 
     faces = "".join(font_face(HERE / "fonts" / f"IBMPlexMono-{w}.woff2", wt, text)
@@ -437,7 +445,7 @@ def activity(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     # Legend.
     x, ly = X0, y + FIRST_ROW
     for layer in LAYERS:
-        c.rect(x, ly - 8, 9, 9, f"l-{slug(layer)}")
+        c.rect(x, ly - 8, 9, 9, f"a-{slug(layer)}")
         c.text(x + 14, ly, layer, "muted", 11)
         x += 14 + len(layer) * 6.6 + 18
 
@@ -453,7 +461,7 @@ def activity(c: Canvas, d: dict, today: dt.date, y: float) -> float:
         if any(a > b for a, b in zip(above, below)):
             upper = " ".join(f"{x:.1f},{scale(v):.1f}" for x, v in zip(xs, above))
             lower = " ".join(f"{x:.1f},{scale(v):.1f}" for x, v in reversed(list(zip(xs, below))))
-            c.add(f'<polygon class="l-{slug(layer)}" points="{upper} {lower}"/>')
+            c.add(f'<polygon class="a-{slug(layer)}" points="{upper} {lower}"/>')
         below = above
     for i, m in enumerate(months):
         if m.endswith("-01"):
@@ -479,7 +487,7 @@ def activity(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     return dots_end + 16
 
 
-def summary(c: Canvas, d: dict, today: dt.date, y: float, week_line: str) -> float:
+def summary(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     year = str(today.year)
     created = dt.date.fromisoformat(d["created"])
     all_time = sum(d["days"].values())
@@ -526,21 +534,23 @@ def summary(c: Canvas, d: dict, today: dt.date, y: float, week_line: str) -> flo
         x += 12 + len(label) * 6.6 + 16
     y += 30
 
-    # Contributions per week, over the past year or since the account began.
-    n = 52 if week_line.startswith("year") else (today - created).days // 7 + 1
+    # Contributions per week since the account began, height by square root like the chart above.
+    n = (today - created).days // 7 + 1
     start = today - dt.timedelta(days=n * 7 - 1)
     weeks = [sum(d["days"].get((start + dt.timedelta(days=w * 7 + i)).isoformat(), 0) for i in range(7))
              for w in range(n)]
     c.text(X0, y, "contributions a week", "muted", 12)
     peak = max(weeks) or 1
-    height = (lambda v: math.sqrt(v / peak)) if week_line.endswith("sqrt") else (lambda v: v / peak)
     step = bar_w / (len(weeks) - 1)
-    pts = " ".join(f"{VAL + i * step:.1f},{y - 22 * height(v):.1f}" for i, v in enumerate(weeks))
+    pts = " ".join(f"{VAL + i * step:.1f},{y - 22 * math.sqrt(v / peak):.1f}" for i, v in enumerate(weeks))
+    for year in range(start.year + 1, today.year + 1):
+        x = VAL + (dt.date(year, 1, 1) - start).days / 7 * step
+        c.add(f'<line x1="{x:.1f}" x2="{x:.1f}" y1="{y - 24:.1f}" y2="{y + 0.5:.1f}" '
+              'class="s-edge" stroke-width="0.8" stroke-dasharray="2 2"/>')
     c.hline(VAL, VAL + bar_w, y + 0.5, dash="2 3")
     c.add(f'<polyline points="{pts}" fill="none" class="s-accent" stroke-width="1.5" '
           'stroke-linejoin="round" stroke-linecap="round"/>')
-    span = "past year" if week_line.startswith("year") else f"since {created.year}"
-    c.text(VAL + bar_w + 14, y, f"{span}  ·  max {peak:,}", "muted", 11)
+    c.text(VAL + bar_w + 14, y, f"since {created.year}  ·  max {peak:,}", "muted", 11)
     return y
 
 
@@ -579,10 +589,10 @@ def recent(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     return y
 
 
-def render(d: dict, today: dt.date, week_line: str = "year-sqrt") -> str:
+def render(d: dict, today: dt.date) -> str:
     c = Canvas()
     y = activity(c, d, today, 18)
-    y = summary(c, d, today, y + SECTION_GAP, week_line)
+    y = summary(c, d, today, y + SECTION_GAP)
     y = recent(c, d, today, y + SECTION_GAP)
     return c.svg(W, math.ceil(y + 12), "Max's GitHub activity: per month since 2020, a summary, and the last 90 days")
 
@@ -591,7 +601,7 @@ def main(args: Args):
     today = dt.date.fromisoformat(args.today) if args.today else dt.date.today()
     if args.refresh or not args.cache.exists():
         args.cache.write_text(json.dumps(fetch(today)))
-    args.out.write_text(render(json.loads(args.cache.read_text()), today, args.weeks))
+    args.out.write_text(render(json.loads(args.cache.read_text()), today))
     print(args.out)
 
 

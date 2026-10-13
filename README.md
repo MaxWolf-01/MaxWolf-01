@@ -7,7 +7,6 @@
 <picture><img src="/cards/term/prompt-pinky.svg" alt="$ pinky -l max" align="absbottom"></picture>
 Login name: max                         In real life:  Maximilian Wolf            Plan: <a href="https://mwolf.dev">mwolf.dev</a>
 Directory: /home/max                    Shell:  /home/max/.nix-profile/bin/zsh
-
 <details><summary><picture><img src="/cards/term/prompt-tree-research.svg" alt="$ tree research/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-research.svg" alt="research/" align="absbottom"></picture>
   ┣━━ <picture><img src="/cards/term/dir-2025.svg" alt="2025/" align="absbottom"></picture>
   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/grax">grax</a></span>                     - Graph Rewriting Automata in JAX

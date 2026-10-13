@@ -31,6 +31,8 @@ COMMANDS = [
     *[(f"tree-{d}", f"tree {d}/", f"{d}/") for d in ("research", "apps", "tools", "open-source", "fun")],
     ("card", "uv run cards/card.py", None),
 ]
+# Pixels of space above a prompt that follows plain output; a blank line is too much.
+SPACE_ABOVE = {"tree-research": 6}
 DIRS = ["research", "apps", "tools", "open-source", "fun", *map(str, range(2021, 2027))]
 # What the live prompt types, in a loop.
 COMMENTS = [
@@ -79,9 +81,11 @@ def style(extra: str = "") -> str:
             f"{inks(0)} @media (prefers-color-scheme: dark) {{ {inks(1)} }}{extra}")
 
 
-def svg(lines: list[str], rows: int, width_chars: int, extra_style: str = "") -> str:
-    w, h = round(width_chars * CHAR + 8), round(rows * LINE)
+def svg(lines: list[str], rows: int, width_chars: int, extra_style: str = "", space_above: int = 0) -> str:
+    w, h = round(width_chars * CHAR + 8), round(rows * LINE) + space_above
     body = "\n".join(lines)
+    if space_above:
+        body = f'<g transform="translate(0 {space_above})">{body}</g>'
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">'
             f"<style>{style(extra_style)}</style>\n{body}\n</svg>\n")
 
@@ -97,12 +101,12 @@ BLINK = (" @keyframes blink { 50% { opacity: 0 } } .cur { animation: blink 1.1s 
          " @media (prefers-reduced-motion: reduce) { * { animation: none !important } }")
 
 
-def prompt(command: str, directory: str | None) -> str:
+def prompt(command: str, directory: str | None, space_above: int = 0) -> str:
     split = len(command) - len(directory) if directory else len(command)
     lines = [f'<text x="0" y="{BASELINE}">{spans(PS1)}</text>',
              f'<text x="0" y="{LINE + BASELINE}">'
              f'{spans([PS2, ("text", command[:split]), ("dir b", command[split:])])}</text>']
-    return svg(lines, 2, max(22, 4 + len(command)))
+    return svg(lines, 2, max(22, 4 + len(command)), space_above=space_above)
 
 
 def live_prompt(comments: list[str]) -> str:
@@ -146,7 +150,7 @@ def main(args: Args):
     shutil.rmtree(args.out, ignore_errors=True)
     args.out.mkdir(parents=True)
     for stem, command, directory in COMMANDS:
-        (args.out / f"prompt-{stem}.svg").write_text(prompt(command, directory))
+        (args.out / f"prompt-{stem}.svg").write_text(prompt(command, directory, SPACE_ABOVE.get(stem, 0)))
     (args.out / "prompt-idle.svg").write_text(live_prompt(COMMENTS) if args.live else idle_prompt())
     for d in DIRS:
         line = f'<text x="0" y="{BASELINE}" class="dir b">{escape(d)}/</text>'
