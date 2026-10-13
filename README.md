@@ -47,7 +47,7 @@ Directory: /home/max                    Shell:  /home/max/.nix-profile/bin/zsh
   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/aleator">aleator</a></span>        - RNG-based habit formation app           <picture><img src="/cards/term/tags-react-typescript-fastapi.svg" alt="# react · typescript · fastapi" align="absbottom"></picture>
   ┗━━ <picture><img src="/cards/term/dir-2021.svg" alt="2021/" align="absbottom"></picture>
       ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/TruthTabler">TruthTabler</a></span>    - boolean expression parser + simplifier  <picture><img src="/cards/term/tags-python.svg" alt="# python" align="absbottom"></picture>
-      ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/2048JavaFx-Bot">2048JavaFx-Bot</a></span> - 2048 with parallel expectimax bot</details><picture><img src="/cards/term/prompt-card.svg" alt="$ uv run cards/card.py" align="absbottom"></picture>       <picture><img src="/cards/term/tags-java.svg" alt="# java" align="absbottom"></picture>
+      ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/2048JavaFx-Bot">2048JavaFx-Bot</a></span> - 2048 with parallel expectimax bot  <picture><img src="/cards/term/tags-java.svg" alt="# java" align="absbottom"></picture></details><picture><img src="/cards/term/prompt-card.svg" alt="$ uv run cards/card.py" align="absbottom"></picture>
 <picture><img src="/cards/activity.svg" alt="Max's GitHub activity: contributions per month since 2020, a summary, and the last 90 days"></picture>
 <picture><img src="/cards/term/prompt-idle.svg" alt="$" align="absbottom"></picture>
 </pre>
