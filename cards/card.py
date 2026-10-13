@@ -22,6 +22,7 @@ Examples:
 import base64
 import collections
 import datetime as dt
+import fnmatch
 import html
 import io
 import json
@@ -63,8 +64,8 @@ FOLDER = {
                  "hls-foundation-os", "evolving_ideas"},
     "apps": {"yapit", "aleator", "higgs-audio", "markxiv"},
 }
-# Markup, prose and notebooks (mostly stored output) don't count as languages written.
-NOT_CODE = {"Jupyter Notebook", "HTML", "CSS", "SCSS", "TeX"}
+# Notebooks are mostly stored output.
+NOT_WRITTEN = {"Jupyter Notebook"}
 
 
 @dataclass
@@ -153,13 +154,19 @@ def public_contributions(c: dict, month: str, out: list):
                             "date": f"{month}-01", "commits": 0, "other": r["contributions"]["totalCount"]})
 
 
-def work_commits(viewer_id: str) -> collections.Counter:
-    """Max's commits per month on the default branches of the work orgs' private repos."""
-    months = collections.Counter()
+def work_commits(viewer_id: str) -> tuple[collections.Counter, set[str]]:
+    """Max's commits per month on the default branches of the work orgs' private repos, and those repos.
+
+    A commit counts once it is released to the default branch, as on GitHub's
+    own calendar; merged work waiting on an integration branch shows up with
+    the next release, dated by when it was committed.
+    """
+    months, repos_seen = collections.Counter(), set()
     for org in sorted(WORK):
         repos = gql_or_exit('query($org:String!){organization(login:$org){repositories(first:100,privacy:PRIVATE)'
                     '{nodes{name}}}}', org=org)["organization"]
         for repo in (repos or {"repositories": {"nodes": []}})["repositories"]["nodes"]:
+            repos_seen.add(f"{org}/{repo['name']}")
             after = None
             while True:
                 ref = gql_or_exit("query($o:String!,$n:String!,$id:ID!,$after:String){repository(owner:$o,name:$n){"
@@ -173,34 +180,71 @@ def work_commits(viewer_id: str) -> collections.Counter:
                 if not hist["pageInfo"]["hasNextPage"]:
                     break
                 after = hist["pageInfo"]["endCursor"]
-    return months
+    return months, repos_seen
 
 
 REPO_SHARE = """
   nameWithOwner isPrivate
-  defaultBranchRef { target { ... on Commit { mine: history(author: {id: $id}) { totalCount } } } }
+  defaultBranchRef { name target { ... on Commit { mine: history(author: {id: $id}) { totalCount } } } }
   languages(first: 20) { edges { size node { name } } }
 """
 
 
-def weighted_languages(viewer_id: str, public_repos: set[str]) -> dict[str, float]:
+def markdown_bytes(full: str, branch: str) -> int:
+    """Bytes of Markdown in a repo's tree, which GitHub's language statistics leave out as prose.
+
+    Paths the repo's .gitattributes marks linguist-generated or linguist-vendored
+    don't count, as GitHub's own statistics skip them: a copy of notes kept for a
+    site build is not writing.
+    """
+    def get(path):
+        run = subprocess.run(["gh", "api", "-X", "GET", f"repos/{full}/{path}"], capture_output=True, text=True)
+        return json.loads(run.stdout) if run.returncode == 0 else None
+
+    tree = get(f"git/trees/{branch}?recursive=1")
+    if not tree:
+        return 0
+    attrs = get(f"contents/.gitattributes?ref={branch}")
+    skip = []
+    for line in base64.b64decode(attrs["content"]).decode(errors="replace").splitlines() if attrs else ():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        pattern, *flags = line.split()
+        if any(f in ("linguist-generated", "linguist-generated=true", "linguist-vendored", "linguist-vendored=true")
+               for f in flags):
+            skip.append(pattern.lstrip("/"))
+    return sum(e.get("size", 0) for e in tree["tree"]
+               if e["type"] == "blob" and e["path"].endswith(".md") and not any(fnmatch.fnmatch(e["path"], p) for p in skip))
+
+
+def weighted_languages(viewer_id: str, extra_repos: set[str]) -> tuple[dict[str, float], dict[str, float]]:
     """Max's commits in every repo he committed to, split by each repo's language mix.
 
     Weighting bytes by his share of the commits instead lets a repo of vendored
-    plugin bundles outweigh everything he wrote. Only the totals per language
-    leave this function, so no private repo is named in the cache.
+    plugin bundles outweigh everything he wrote. GitHub measures no Markdown, so
+    each repo's Markdown is measured from its files: that share of the commits
+    is writing, returned apart, and only the rest is split among the languages.
+    A notes vault then adds little HTML for its few exported pages. Only the
+    totals leave this function, so no private repo is named in the cache.
     """
-    langs, seen, after = collections.Counter(), set(), None
+    langs, writing, seen, after = collections.Counter(), collections.Counter(), set(), None
 
     def add(repo):
         seen.add(repo["nameWithOwner"])
         ref = repo["defaultBranchRef"]
         if not ref:
             return
-        code = {e["node"]["name"]: e["size"] for e in repo["languages"]["edges"] if e["node"]["name"] not in NOT_CODE}
-        size = sum(code.values())
-        for name, n in code.items() if size else ():
-            langs[name] += ref["target"]["mine"]["totalCount"] * n / size
+        mix = {e["node"]["name"]: e["size"] for e in repo["languages"]["edges"] if e["node"]["name"] not in NOT_WRITTEN}
+        size = sum(mix.values())
+        mine = ref["target"]["mine"]["totalCount"]
+        md = markdown_bytes(repo["nameWithOwner"], ref["name"]) if mine else 0
+        if not md + size:
+            return
+        # The commits split by bytes: the Markdown share is writing, the rest goes to the code languages.
+        writing["markdown"] += mine * md / (md + size)
+        writing["code"] += mine * size / (md + size)
+        for name, n in mix.items():
+            langs[name] += mine * n / (md + size)
 
     while True:
         page = gql_or_exit("query($id:ID!,$after:String){viewer{repositories(first:50,after:$after,"
@@ -211,17 +255,18 @@ def weighted_languages(viewer_id: str, public_repos: set[str]) -> dict[str, floa
         if not page["pageInfo"]["hasNextPage"]:
             break
         after = page["pageInfo"]["endCursor"]
-    # Public projects max committed to without being a member: upstream work.
-    # A query on a project the size of nixpkgs can time out; max's few commits
-    # there don't move the bar, so it is left out.
-    for full in sorted(public_repos - seen):
+    # Repos the listing above leaves out: public projects max committed to
+    # without being a member (upstream work), and work repos reached through an
+    # org team rather than membership. A query on a project the size of nixpkgs
+    # can time out; max's few commits there don't move the bar, so it is left out.
+    for full in sorted(extra_repos - seen):
         owner, name = full.split("/")
         try:
             add(gql(f"query($o:String!,$n:String!,$id:ID!){{repository(owner:$o,name:$n){{{REPO_SHARE}}}}}",
                     o=owner, n=name, id=viewer_id)["repository"])
         except QueryFailed:
             continue
-    return dict(langs)
+    return dict(langs), dict(writing)
 
 
 def upstream(orgs: set[str]) -> tuple[list, list]:
@@ -274,8 +319,10 @@ def fetch(today: dt.date) -> dict:
         for j, m in enumerate(chunk):
             public_contributions(data[f"m{j}"], m.strftime("%Y-%m"), public)
 
+    work_months, work_repos = work_commits(viewer["id"])
     merged, fixed = upstream(orgs)
     public_repos = {f"{r['owner']}/{r['name']}" for r in public if r["commits"] and r["owner"] not in WORK | SCHOOL | PRIVATE}
+    langs, writing = weighted_languages(viewer["id"], public_repos | work_repos)
 
     stars, repo_count = 0, 0
     for owner in sorted(OWN):
@@ -291,8 +338,9 @@ def fetch(today: dt.date) -> dict:
         "created": created.isoformat(),
         "days": days,
         "public": public,
-        "work_months": dict(work_commits(viewer["id"])),
-        "langs": weighted_languages(viewer["id"], public_repos),
+        "work_months": dict(work_months),
+        "langs": langs,
+        "writing": writing,
         "merged": merged,
         "fixed": fixed,
         "repos": repo_count,
@@ -348,6 +396,9 @@ INK = {  # role: (light, dark)
     "strong": ("#22140b", "#faf2dc"),
     "accent": ("#426724", "#6ea444"),
     "edge": ("#cfbca3", "#4a433b"),
+    # The Markdown/code bar, in neutrals so it can't be read as two of the languages above.
+    "prose": ("#d9cdb6", "#d6cbb5"),
+    "codeink": ("#8d8781", "#5f5a55"),
 }
 
 
@@ -490,8 +541,9 @@ def activity(c: Canvas, d: dict, today: dt.date, y: float) -> float:
 def summary(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     year = str(today.year)
     created = dt.date.fromisoformat(d["created"])
-    all_time = sum(d["days"].values())
-    this_year = sum(n for day, n in d["days"].items() if day.startswith(year))
+    days = d["days"]
+    all_time = sum(days.values())
+    this_year = sum(n for day, n in days.items() if day.startswith(year))
     busiest = collections.Counter()
     for r in d["public"]:
         if r["date"].startswith(year) and r["owner"] in OWN:
@@ -532,12 +584,20 @@ def summary(c: Canvas, d: dict, today: dt.date, y: float) -> float:
         c.rect(x, y - 8, 8, 8, ink)
         c.text(x + 12, y, label, "muted", 11)
         x += 12 + len(label) * 6.6 + 16
+    y += 26
+
+    # The same commits split by what they changed: Markdown (notes, docs, prompts) or code.
+    md, code = d["writing"]["markdown"], d["writing"]["code"]
+    c.text(X0, y, "markdown · code", "muted", 12)
+    c.rect(VAL, y - 6, max(bar_w * md / (md + code) - 2, 1), 5, "prose", rx=1.5)
+    c.rect(VAL + bar_w * md / (md + code), y - 6, bar_w * code / (md + code), 5, "codeink", rx=1.5)
+    c.text(VAL + bar_w + 14, y, f"{100 * md / (md + code):.0f}% markdown  ·  {100 * code / (md + code):.0f}% code", "muted", 11)
     y += 30
 
     # Contributions per week since the account began, height by square root like the chart above.
     n = (today - created).days // 7 + 1
     start = today - dt.timedelta(days=n * 7 - 1)
-    weeks = [sum(d["days"].get((start + dt.timedelta(days=w * 7 + i)).isoformat(), 0) for i in range(7))
+    weeks = [sum(days.get((start + dt.timedelta(days=w * 7 + i)).isoformat(), 0) for i in range(7))
              for w in range(n)]
     c.text(X0, y, "contributions a week", "muted", 12)
     peak = max(weeks) or 1

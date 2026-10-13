@@ -33,6 +33,19 @@ COMMANDS = [
 ]
 # Pixels of space above a prompt that follows plain output; a blank line is too much.
 SPACE_ABOVE = {"tree-research": 6}
+# The dim comment after a tree entry, naming what it is built with: (words, the word that is a link).
+# The README wraps the image in that link; the word is drawn as one.
+TAGS = [
+    (["yapit.md", "react", "fastapi"], "yapit.md"),
+    (["nix", "neovim", "zsh"], None),
+    (["claude", "pi"], "pi"),
+    (["pypi", "pi", "claude"], "pypi"),
+    (["pypi"], "pypi"),
+    (["javascript", "obsidian"], None),
+    (["react", "typescript", "fastapi"], None),
+    (["python"], None),
+    (["java"], None),
+]
 DIRS = ["research", "apps", "tools", "open-source", "fun", *map(str, range(2021, 2027))]
 # What the live prompt types, in a loop.
 COMMENTS = [
@@ -58,6 +71,7 @@ INK = {  # role: (light, dark)
     "dir": ("#2b7a8c", "#5ba5b7"),      # slot 12, bold, as ls colours directories
     "text": ("#1f2328", "#f0f6fc"),     # GitHub's code text
     "comment": ("#6e6259", "#8b8178"),
+    "link": ("#426724", "#7fa05a"),     # the house moss, for the one word of a tag line that links
     "cursor": ("#8a6a2a", "#b89d65"),
 }
 
@@ -78,6 +92,7 @@ def style(extra: str = "") -> str:
         return " ".join(f".{k} {{ fill: {v[i]} }}" for k, v in INK.items())
 
     return (f"text {{ font-family: {FONT}; font-size: {SIZE}px; white-space: pre }} .b {{ font-weight: 700 }} "
+            ".link { text-decoration: underline } "
             f"{inks(0)} @media (prefers-color-scheme: dark) {{ {inks(1)} }}{extra}")
 
 
@@ -152,6 +167,14 @@ def main(args: Args):
     for stem, command, directory in COMMANDS:
         (args.out / f"prompt-{stem}.svg").write_text(prompt(command, directory, SPACE_ABOVE.get(stem, 0)))
     (args.out / "prompt-idle.svg").write_text(live_prompt(COMMENTS) if args.live else idle_prompt())
+    for words, link in TAGS:
+        parts = [("comment", "# ")]
+        for i, w in enumerate(words):
+            parts += [("comment", " · ")] if i else []
+            parts += [("link" if w == link else "comment", w)]
+        line = f'<text x="0" y="{BASELINE}">{spans(parts)}</text>'
+        stem = "tags-" + "-".join("".join(c for c in w if c.isalnum()) for w in words)
+        (args.out / f"{stem}.svg").write_text(svg([line], 1, 2 + len(" · ".join(words))))
     for d in DIRS:
         line = f'<text x="0" y="{BASELINE}" class="dir b">{escape(d)}/</text>'
         (args.out / f"dir-{d}.svg").write_text(svg([line], 1, len(d) + 1))
