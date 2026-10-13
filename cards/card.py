@@ -158,52 +158,33 @@ def public_contributions(c: dict, month: str, out: list):
                             "date": f"{month}-01", "commits": 0, "other": r["contributions"]["totalCount"]})
 
 
-# A work repo's merged work lives on its integration branch until a release brings it to the default branch.
-INTEGRATION = ("development", "develop", "dev", "stage", "staging")
+def work_commits(viewer_id: str) -> tuple[collections.Counter, set[str]]:
+    """Max's commits per month on the default branches of the work orgs' private repos, and those repos.
 
-
-@dataclass
-class Work:
-    months: collections.Counter  # max's commits per month, merged or released
-    unreleased: collections.Counter  # per day, those not on the default branch, which GitHub's calendar leaves out
-    per_repo: dict  # owner/name: commit count, for weighting languages; never written to the cache
-
-
-def work_commits(viewer_id: str) -> Work:
-    """Max's commits on the work orgs' private repos, on the default branch or an integration branch, each counted once."""
-    work = Work(collections.Counter(), collections.Counter(), {})
+    A commit counts once it is released to the default branch, as on GitHub's
+    own calendar; merged work waiting on an integration branch shows up with
+    the next release, dated by when it was committed.
+    """
+    months, repos_seen = collections.Counter(), set()
     for org in sorted(WORK):
         repos = gql_or_exit('query($org:String!){organization(login:$org){repositories(first:100,privacy:PRIVATE)'
-                    '{nodes{name defaultBranchRef{name} refs(refPrefix:"refs/heads/",first:100){nodes{name}}}}}}',
-                    org=org)["organization"]
+                    '{nodes{name}}}}', org=org)["organization"]
         for repo in (repos or {"repositories": {"nodes": []}})["repositories"]["nodes"]:
-            if not repo["defaultBranchRef"]:
-                continue
-            default = repo["defaultBranchRef"]["name"]
-            branches = [default] + [b["name"] for b in repo["refs"]["nodes"] if b["name"] in INTEGRATION and b["name"] != default]
-            commits = {}  # oid: (day, on the default branch)
-            for branch in branches:
-                after = None
-                while True:
-                    ref = gql_or_exit("query($o:String!,$n:String!,$b:String!,$id:ID!,$after:String){repository(owner:$o,name:$n){"
-                              "ref(qualifiedName:$b){target{... on Commit{history(author:{id:$id},first:100,after:$after)"
-                              "{pageInfo{hasNextPage endCursor} nodes{oid committedDate}}}}}}}",
-                              o=org, n=repo["name"], b=f"refs/heads/{branch}", id=viewer_id, after=after)["repository"]["ref"]
-                    if not ref:
-                        break
-                    hist = ref["target"]["history"]
-                    for n in hist["nodes"]:
-                        if n["oid"] not in commits:
-                            commits[n["oid"]] = (n["committedDate"][:10], branch == default)
-                    if not hist["pageInfo"]["hasNextPage"]:
-                        break
-                    after = hist["pageInfo"]["endCursor"]
-            for day, released in commits.values():
-                work.months[day[:7]] += 1
-                if not released:
-                    work.unreleased[day] += 1
-            work.per_repo[f"{org}/{repo['name']}"] = len(commits)
-    return work
+            repos_seen.add(f"{org}/{repo['name']}")
+            after = None
+            while True:
+                ref = gql_or_exit("query($o:String!,$n:String!,$id:ID!,$after:String){repository(owner:$o,name:$n){"
+                          "defaultBranchRef{target{... on Commit{history(author:{id:$id},first:100,after:$after)"
+                          "{pageInfo{hasNextPage endCursor} nodes{committedDate}}}}}}}",
+                          o=org, n=repo["name"], id=viewer_id, after=after)["repository"]["defaultBranchRef"]
+                if not ref:
+                    break
+                hist = ref["target"]["history"]
+                months.update(n["committedDate"][:7] for n in hist["nodes"])
+                if not hist["pageInfo"]["hasNextPage"]:
+                    break
+                after = hist["pageInfo"]["endCursor"]
+    return months, repos_seen
 
 
 REPO_SHARE = """
@@ -213,13 +194,11 @@ REPO_SHARE = """
 """
 
 
-def weighted_languages(viewer_id: str, public_repos: set[str], commits: dict[str, int]) -> dict[str, float]:
+def weighted_languages(viewer_id: str, extra_repos: set[str]) -> dict[str, float]:
     """Max's commits in every repo he committed to, split by each repo's language mix.
 
     Weighting bytes by his share of the commits instead lets a repo of vendored
-    plugin bundles outweigh everything he wrote. `commits` overrides the count
-    on the default branch, for work repos whose merged work isn't released yet.
-    Only the totals
+    plugin bundles outweigh everything he wrote. Only the totals
     per language leave this function, so no private repo is named in the cache.
     """
     langs, seen, after = collections.Counter(), set(), None
@@ -233,7 +212,7 @@ def weighted_languages(viewer_id: str, public_repos: set[str], commits: dict[str
         size = sum(mix.values())
         if sum(n for name, n in mix.items() if name not in MARKUP) < SOFTWARE_SHARE * size:
             return
-        mine = commits.get(repo["nameWithOwner"], ref["target"]["mine"]["totalCount"])
+        mine = ref["target"]["mine"]["totalCount"]
         for name, n in mix.items() if size else ():
             langs[name] += mine * n / size
 
@@ -250,7 +229,7 @@ def weighted_languages(viewer_id: str, public_repos: set[str], commits: dict[str
     # without being a member (upstream work), and work repos reached through an
     # org team rather than membership. A query on a project the size of nixpkgs
     # can time out; max's few commits there don't move the bar, so it is left out.
-    for full in sorted((public_repos | set(commits)) - seen):
+    for full in sorted(extra_repos - seen):
         owner, name = full.split("/")
         try:
             add(gql(f"query($o:String!,$n:String!,$id:ID!){{repository(owner:$o,name:$n){{{REPO_SHARE}}}}}",
@@ -310,7 +289,7 @@ def fetch(today: dt.date) -> dict:
         for j, m in enumerate(chunk):
             public_contributions(data[f"m{j}"], m.strftime("%Y-%m"), public)
 
-    work = work_commits(viewer["id"])
+    work_months, work_repos = work_commits(viewer["id"])
     merged, fixed = upstream(orgs)
     public_repos = {f"{r['owner']}/{r['name']}" for r in public if r["commits"] and r["owner"] not in WORK | SCHOOL | PRIVATE}
 
@@ -328,9 +307,8 @@ def fetch(today: dt.date) -> dict:
         "created": created.isoformat(),
         "days": days,
         "public": public,
-        "work_months": dict(work.months),
-        "work_unreleased": dict(work.unreleased),
-        "langs": weighted_languages(viewer["id"], public_repos, work.per_repo),
+        "work_months": dict(work_months),
+        "langs": weighted_languages(viewer["id"], public_repos | work_repos),
         "merged": merged,
         "fixed": fixed,
         "repos": repo_count,
@@ -339,13 +317,6 @@ def fetch(today: dt.date) -> dict:
 
 
 # ---------------------------------------------------------------- shape
-
-def contribution_days(d: dict) -> collections.Counter:
-    """Contributions per day: GitHub's calendar plus merged work it doesn't count until it's released."""
-    days = collections.Counter(d["days"])
-    days.update(d.get("work_unreleased", {}))
-    return days
-
 
 def category(owner: str, name: str) -> str:
     if owner in WORK:
@@ -480,7 +451,7 @@ def activity(c: Canvas, d: dict, today: dt.date, y: float) -> float:
         if m in per:
             per[m]["work"] += n
     totals = collections.Counter()
-    for day, n in contribution_days(d).items():
+    for day, n in d["days"].items():
         totals[day[:7]] += n
     for m in months:
         # Whatever the calendar counts beyond the named layers is private work.
@@ -535,7 +506,7 @@ def activity(c: Canvas, d: dict, today: dt.date, y: float) -> float:
 def summary(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     year = str(today.year)
     created = dt.date.fromisoformat(d["created"])
-    days = contribution_days(d)
+    days = d["days"]
     all_time = sum(days.values())
     this_year = sum(n for day, n in days.items() if day.startswith(year))
     busiest = collections.Counter()
@@ -614,7 +585,7 @@ def recent(c: Canvas, d: dict, today: dt.date, y: float) -> float:
             key = (r["owner"], r["name"])
             weekly[key][min((day - since).days // 7, 12)] += r["commits"]
             named[key] += r["commits"]
-    window = sum(n for day, n in contribution_days(d).items() if dt.date.fromisoformat(day) > since)
+    window = sum(n for day, n in d["days"].items() if dt.date.fromisoformat(day) > since)
     unnamed = max(window - named_total, 0)
     rows = [(k, n) for k, n in named.most_common(6) if n >= 5]
 
