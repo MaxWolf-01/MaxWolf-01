@@ -22,6 +22,7 @@ Examples:
 import base64
 import collections
 import datetime as dt
+import fnmatch
 import html
 import io
 import json
@@ -189,19 +190,47 @@ def work_commits(viewer_id: str) -> tuple[collections.Counter, set[str]]:
 
 REPO_SHARE = """
   nameWithOwner isPrivate
-  defaultBranchRef { target { ... on Commit { mine: history(author: {id: $id}) { totalCount } } } }
+  defaultBranchRef { name target { ... on Commit { mine: history(author: {id: $id}) { totalCount } } } }
   languages(first: 20) { edges { size node { name } } }
 """
 
 
-def weighted_languages(viewer_id: str, extra_repos: set[str]) -> dict[str, float]:
+def markdown_bytes(full: str, branch: str) -> int:
+    """Bytes of Markdown in a repo's tree, which GitHub's language statistics leave out as prose.
+
+    Paths the repo's .gitattributes marks linguist-generated or linguist-vendored
+    don't count, as GitHub's own statistics skip them: a copy of notes kept for a
+    site build is not writing.
+    """
+    def get(path):
+        run = subprocess.run(["gh", "api", "-X", "GET", f"repos/{full}/{path}"], capture_output=True, text=True)
+        return json.loads(run.stdout) if run.returncode == 0 else None
+
+    tree = get(f"git/trees/{branch}?recursive=1")
+    if not tree:
+        return 0
+    attrs = get(f"contents/.gitattributes?ref={branch}")
+    skip = []
+    for line in base64.b64decode(attrs["content"]).decode(errors="replace").splitlines() if attrs else ():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        pattern, *flags = line.split()
+        if any(f in ("linguist-generated", "linguist-generated=true", "linguist-vendored", "linguist-vendored=true")
+               for f in flags):
+            skip.append(pattern.lstrip("/"))
+    return sum(e.get("size", 0) for e in tree["tree"]
+               if e["type"] == "blob" and e["path"].endswith(".md") and not any(fnmatch.fnmatch(e["path"], p) for p in skip))
+
+
+def weighted_languages(viewer_id: str, extra_repos: set[str]) -> tuple[dict[str, float], dict[str, float]]:
     """Max's commits in every repo he committed to, split by each repo's language mix.
 
     Weighting bytes by his share of the commits instead lets a repo of vendored
-    plugin bundles outweigh everything he wrote. Only the totals
-    per language leave this function, so no private repo is named in the cache.
+    plugin bundles outweigh everything he wrote. Also returns his commits split
+    into Markdown and code by each repo's bytes. Only the totals leave this
+    function, so no private repo is named in the cache.
     """
-    langs, seen, after = collections.Counter(), set(), None
+    langs, writing, seen, after = collections.Counter(), collections.Counter(), set(), None
 
     def add(repo):
         seen.add(repo["nameWithOwner"])
@@ -210,9 +239,13 @@ def weighted_languages(viewer_id: str, extra_repos: set[str]) -> dict[str, float
             return
         mix = {e["node"]["name"]: e["size"] for e in repo["languages"]["edges"] if e["node"]["name"] not in NOT_WRITTEN}
         size = sum(mix.values())
+        mine = ref["target"]["mine"]["totalCount"]
+        md = markdown_bytes(repo["nameWithOwner"], ref["name"]) if mine else 0
+        if md + size:
+            writing["markdown"] += mine * md / (md + size)
+            writing["code"] += mine * size / (md + size)
         if sum(n for name, n in mix.items() if name not in MARKUP) < SOFTWARE_SHARE * size:
             return
-        mine = ref["target"]["mine"]["totalCount"]
         for name, n in mix.items() if size else ():
             langs[name] += mine * n / size
 
@@ -236,7 +269,7 @@ def weighted_languages(viewer_id: str, extra_repos: set[str]) -> dict[str, float
                     o=owner, n=name, id=viewer_id)["repository"])
         except QueryFailed:
             continue
-    return dict(langs)
+    return dict(langs), dict(writing)
 
 
 def upstream(orgs: set[str]) -> tuple[list, list]:
@@ -292,6 +325,7 @@ def fetch(today: dt.date) -> dict:
     work_months, work_repos = work_commits(viewer["id"])
     merged, fixed = upstream(orgs)
     public_repos = {f"{r['owner']}/{r['name']}" for r in public if r["commits"] and r["owner"] not in WORK | SCHOOL | PRIVATE}
+    langs, writing = weighted_languages(viewer["id"], public_repos | work_repos)
 
     stars, repo_count = 0, 0
     for owner in sorted(OWN):
@@ -308,7 +342,8 @@ def fetch(today: dt.date) -> dict:
         "days": days,
         "public": public,
         "work_months": dict(work_months),
-        "langs": weighted_languages(viewer["id"], public_repos | work_repos),
+        "langs": langs,
+        "writing": writing,
         "merged": merged,
         "fixed": fixed,
         "repos": repo_count,
@@ -549,6 +584,14 @@ def summary(c: Canvas, d: dict, today: dt.date, y: float) -> float:
         c.rect(x, y - 8, 8, 8, ink)
         c.text(x + 12, y, label, "muted", 11)
         x += 12 + len(label) * 6.6 + 16
+    y += 26
+
+    # The same commits split by what they changed: Markdown (notes, docs, prompts) or code.
+    md, code = d["writing"]["markdown"], d["writing"]["code"]
+    c.text(X0, y, "markdown · code", "muted", 12)
+    c.rect(VAL, y - 6, max(bar_w * md / (md + code) - 2, 1), 5, "l-tools", rx=1.5)
+    c.rect(VAL + bar_w * md / (md + code), y - 6, bar_w * code / (md + code), 5, "l-research", rx=1.5)
+    c.text(VAL + bar_w + 14, y, f"{100 * md / (md + code):.0f}% markdown  ·  {100 * code / (md + code):.0f}% code", "muted", 11)
     y += 30
 
     # Contributions per week since the account began, height by square root like the chart above.
