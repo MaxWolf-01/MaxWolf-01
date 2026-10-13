@@ -37,6 +37,7 @@ DIRS = ["research", "apps", "tools", "open-source", "fun", *map(str, range(2021,
 # What the live prompt types, in a loop.
 COMMENTS = [
     "# click a command to run it",
+    "# TODO: artificial life",
     "# more at mwolf.dev",
 ]
 
