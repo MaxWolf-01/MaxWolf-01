@@ -1,6 +1,6 @@
 name: Activity card
 on:
-  schedule: [{cron: "30 0 * * 1"}]  # Mondays, after the metrics card
+  schedule: [{cron: "30 0 * * 1"}]  # Mondays
   workflow_dispatch:
 jobs:
   card:
