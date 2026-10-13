@@ -373,6 +373,7 @@ def nameable(owner: str) -> bool:
 
 # ---------------------------------------------------------------- svg
 
+LABEL = {"school": "school/uni"}  # what the legend calls a layer, where it differs
 LAYERS = ["research", "apps", "tools", "open source", "work", "school", "private"]
 # House inks for GitHub's light and dark grounds. Research takes the accent,
 # open source the second accent; the rest are sand and grey between them.
@@ -510,8 +511,9 @@ def activity(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     x, ly = X0, y + FIRST_ROW
     for layer in LAYERS:
         c.rect(x, ly - 8, 9, 9, f"a-{slug(layer)}")
-        c.text(x + 14, ly, layer, "muted", 11)
-        x += 14 + len(layer) * 6.6 + 18
+        label = LABEL.get(layer, layer)
+        c.text(x + 14, ly, label, "muted", 11)
+        x += 14 + len(label) * 6.6 + 18
 
     top_y, ph = y + FIRST_ROW + 22, 150
     base_y = top_y + ph
