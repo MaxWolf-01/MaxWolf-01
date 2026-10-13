@@ -64,11 +64,6 @@ FOLDER = {
                  "hls-foundation-os", "evolving_ideas"},
     "apps": {"yapit", "aleator", "higgs-audio", "markxiv"},
 }
-# GitHub measures no Markdown, so a notes vault or a folder of generated pages shows up as
-# mostly markup. A repo under this share of programming bytes is documents, not software,
-# and adds no languages; in software, templates and styles count like any other code.
-MARKUP = {"HTML", "CSS", "SCSS", "Sass", "Less", "TeX"}
-SOFTWARE_SHARE = 0.25
 # Notebooks are mostly stored output.
 NOT_WRITTEN = {"Jupyter Notebook"}
 
@@ -226,9 +221,11 @@ def weighted_languages(viewer_id: str, extra_repos: set[str]) -> tuple[dict[str,
     """Max's commits in every repo he committed to, split by each repo's language mix.
 
     Weighting bytes by his share of the commits instead lets a repo of vendored
-    plugin bundles outweigh everything he wrote. Also returns his commits split
-    into Markdown and code by each repo's bytes. Only the totals leave this
-    function, so no private repo is named in the cache.
+    plugin bundles outweigh everything he wrote. GitHub measures no Markdown, so
+    each repo's Markdown is measured from its files: that share of the commits
+    is writing, returned apart, and only the rest is split among the languages.
+    A notes vault then adds little HTML for its few exported pages. Only the
+    totals leave this function, so no private repo is named in the cache.
     """
     langs, writing, seen, after = collections.Counter(), collections.Counter(), set(), None
 
@@ -241,13 +238,13 @@ def weighted_languages(viewer_id: str, extra_repos: set[str]) -> tuple[dict[str,
         size = sum(mix.values())
         mine = ref["target"]["mine"]["totalCount"]
         md = markdown_bytes(repo["nameWithOwner"], ref["name"]) if mine else 0
-        if md + size:
-            writing["markdown"] += mine * md / (md + size)
-            writing["code"] += mine * size / (md + size)
-        if sum(n for name, n in mix.items() if name not in MARKUP) < SOFTWARE_SHARE * size:
+        if not md + size:
             return
-        for name, n in mix.items() if size else ():
-            langs[name] += mine * n / size
+        # The commits split by bytes: the Markdown share is writing, the rest goes to the code languages.
+        writing["markdown"] += mine * md / (md + size)
+        writing["code"] += mine * size / (md + size)
+        for name, n in mix.items():
+            langs[name] += mine * n / (md + size)
 
     while True:
         page = gql_or_exit("query($id:ID!,$after:String){viewer{repositories(first:50,after:$after,"
@@ -399,6 +396,9 @@ INK = {  # role: (light, dark)
     "strong": ("#22140b", "#faf2dc"),
     "accent": ("#426724", "#6ea444"),
     "edge": ("#cfbca3", "#4a433b"),
+    # The Markdown/code bar, in neutrals so it can't be read as two of the languages above.
+    "prose": ("#d9cdb6", "#d6cbb5"),
+    "codeink": ("#8d8781", "#5f5a55"),
 }
 
 
@@ -589,8 +589,8 @@ def summary(c: Canvas, d: dict, today: dt.date, y: float) -> float:
     # The same commits split by what they changed: Markdown (notes, docs, prompts) or code.
     md, code = d["writing"]["markdown"], d["writing"]["code"]
     c.text(X0, y, "markdown · code", "muted", 12)
-    c.rect(VAL, y - 6, max(bar_w * md / (md + code) - 2, 1), 5, "l-tools", rx=1.5)
-    c.rect(VAL + bar_w * md / (md + code), y - 6, bar_w * code / (md + code), 5, "l-research", rx=1.5)
+    c.rect(VAL, y - 6, max(bar_w * md / (md + code) - 2, 1), 5, "prose", rx=1.5)
+    c.rect(VAL + bar_w * md / (md + code), y - 6, bar_w * code / (md + code), 5, "codeink", rx=1.5)
     c.text(VAL + bar_w + 14, y, f"{100 * md / (md + code):.0f}% markdown  ·  {100 * code / (md + code):.0f}% code", "muted", 11)
     y += 30
 
