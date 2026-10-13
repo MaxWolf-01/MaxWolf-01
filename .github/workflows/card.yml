@@ -1,0 +1,25 @@
+name: Activity card
+on:
+  schedule: [{cron: "30 0 * * 1"}]  # Mondays
+  workflow_dispatch:
+jobs:
+  card:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      # GH_TOKEN decides what the card can count: without access to private and
+      # org repos their contributions fold into "private" or drop out.
+      - run: uv run cards/card.py --refresh
+        env:
+          GH_TOKEN: ${{ secrets.METRICS_TOKEN }}
+      - name: Commit the card if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cards/activity.svg
+          git diff --cached --quiet || git commit -m "Update activity card"
+          git pull --rebase
+          git push

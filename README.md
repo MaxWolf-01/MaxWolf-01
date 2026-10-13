@@ -4,38 +4,50 @@
 </p>
 
 <pre>
-<a href="https://mwolf.dev">Max Wolf</a>
-┣━━ 🧠 AI / ML
-┃   ┣━━ 2025
-┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/grax">grax</a></span>                     - Graph Rewriting Automata in JAX
-┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/LNDP">LNDP</a></span>                     - evolving self-assembling neural networks (paper replica)
-┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/neat">NEAT</a></span>                     - neuroevolution in pure Python
-┃   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/omni-x">OMNI-X</a></span>                   - composable building blocks for OMNI-EPIC (wip)
-┃   ┣━━ 2024
-┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/neuro-soup/multi-agent-transformer">multi-agent-transformer</a></span>  - multi-agent RL as sequence modeling (paper replica)
-┃   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/neuro-soup/es-torch">es-torch</a></span>                 - distributed Evolution Strategies in PyTorch (paper replica)
-┃   ┗━━ 2023
-┃       ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/sentinel2-landcover-classification">sentinel2-landcover</a></span>      - satellite imagery classification (diploma project)
-┣━━ 🚀 Apps
-┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/yapit-tts/yapit">yapit</a></span>    - TTS for documents, papers, and web pages <a href="https://yapit.md"><img src="https://img.shields.io/badge/yapit.md-4A5568?style=flat&logo=firefox&logoColor=white" alt="Website"></a> <a href="#"><img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB" alt="React"></a> <a href="#"><img src="https://img.shields.io/badge/FastAPI-005571?logo=fastapi" alt="FastAPI"></a> <a href="#"><img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff" alt="Docker"></a> <a href="#"><img src="https://img.shields.io/badge/Stripe-635BFF?logo=stripe&logoColor=fff" alt="Stripe"></a>
-┣━━ 🔧 Tools
-┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/dotfiles">dotfiles</a></span>    - system config and utility scripts <a href="#"><img src="https://img.shields.io/badge/Nix-5277C3?logo=nixos&logoColor=fff" alt="Nix"></a> <a href="#"><img src="https://img.shields.io/badge/Neovim-57A143?logo=neovim&logoColor=fff" alt="Neovim"></a> <a href="#"><img src="https://img.shields.io/badge/tmux-1BB91F?logo=tmux&logoColor=fff" alt="tmux"></a> <a href="#"><img src="https://img.shields.io/badge/Zsh-F15A24?logo=zsh&logoColor=fff" alt="Zsh"></a>
-┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/agents">agents</a></span>      - prompts and plugins for agents <a href="#"><img src="https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff" alt="Claude"></a> <a href="#"><img src="https://img.shields.io/badge/Obsidian-%23483699.svg?&logo=obsidian&logoColor=white" alt="Obsidian"></a>
-┃   ┣━━ 2026
-┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/clankr">clankr</a></span>      - run coding agents in isolated Docker containers <a href="https://pypi.org/project/clankr/"><img src="https://img.shields.io/badge/PyPI-3775A9?logo=pypi&logoColor=fff" alt="PyPI"></a> <a href="#"><img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff" alt="Docker"></a> <a href="#"><img src="https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff" alt="Claude"></a>
-┃   ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/yapit-tts/yapit-cli">yapit-cli</a></span>   - clean markdown from URLs and documents <a href="https://pypi.org/project/yapit-cli/"><img src="https://img.shields.io/badge/PyPI-3775A9?logo=pypi&logoColor=fff" alt="PyPI"></a>
-┃   ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/gitplot">gitplot</a></span>     - git history visualizations <a href="https://pypi.org/project/gitplot/"><img src="https://img.shields.io/badge/PyPI-3775A9?logo=pypi&logoColor=fff" alt="PyPI"></a>
-┃   ┗━━ 2025
-┃       ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/memex">memex</a></span>       - semantic search + graph traversal for markdown vaults <a href="https://pypi.org/project/memex-md/"><img src="https://img.shields.io/badge/PyPI-3775A9?logo=pypi&logoColor=fff" alt="PyPI"></a>
-┗━━ 🎲 Random/Fun
-    ┣━━ <span style="font-weight: bold"><a href="https://gist.github.com/MaxWolf-01/6ecd0ef197fc239bca818a4266f0cb17">Obsidian Homepage</a></span>  - daily-note stats visualization <a href="#"><img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000" alt="JavaScript"></a> <a href="#"><img src="https://img.shields.io/badge/Obsidian-%23483699.svg?&logo=obsidian&logoColor=white" alt="Obsidian"></a>
-    ┣━━ 2025
-    ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/aleator">aleator</a></span>        - RNG-based habit formation app <a href="#"><img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB" alt="React"></a> <a href="#"><img src="https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white" alt="TypeScript"></a> <a href="#"><img src="https://img.shields.io/badge/FastAPI-005571?logo=fastapi" alt="FastAPI"></a>
-    ┗━━ 2021
-        ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/TruthTabler">TruthTabler</a></span>    - boolean expression parser + simplifier <a href="#"><img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff" alt="Python"></a>
-        ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/2048JavaFx-Bot">2048JavaFx-Bot</a></span> - 2048 with parallel expectimax bot <a href="#"><img src="https://img.shields.io/badge/Java-%23ED8B00.svg?logo=openjdk&logoColor=white" alt="Java"></a>
+<picture><img src="/cards/term/prompt-pinky.svg" alt="$ pinky -l max" align="absbottom"></picture>
+Login name: max                         In real life:  Maximilian Wolf            Plan: <a href="https://mwolf.dev">mwolf.dev</a>
+Directory: /home/max                    Shell:  /home/max/.nix-profile/bin/zsh
+<details><summary><picture><img src="/cards/term/prompt-tree-research.svg" alt="$ tree research/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-research.svg" alt="research/" align="absbottom"></picture>
+  ┣━━ <picture><img src="/cards/term/dir-2025.svg" alt="2025/" align="absbottom"></picture>
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/grax">grax</a></span>                     - Graph Rewriting Automata in JAX
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/LNDP">LNDP</a></span>                     - evolving self-assembling neural networks (paper replica)
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/neat">NEAT</a></span>                     - neuroevolution in pure Python
+  ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/omni-x">OMNI-X</a></span>                   - composable building blocks for OMNI-EPIC (wip)
+  ┣━━ <picture><img src="/cards/term/dir-2024.svg" alt="2024/" align="absbottom"></picture>
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/neuro-soup/multi-agent-transformer">multi-agent-transformer</a></span>  - multi-agent RL as sequence modeling (paper replica)
+  ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/neuro-soup/es-torch">es-torch</a></span>                 - distributed Evolution Strategies in PyTorch (paper replica)
+  ┗━━ <picture><img src="/cards/term/dir-2023.svg" alt="2023/" align="absbottom"></picture>
+      ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/sentinel2-landcover-classification">sentinel2-landcover</a></span>      - satellite imagery classification (diploma project)</details><details><summary><picture><img src="/cards/term/prompt-tree-apps.svg" alt="$ tree apps/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-apps.svg" alt="apps/" align="absbottom"></picture>
+  ┗━━ <span style="font-weight: bold"><a href="https://github.com/yapit-tts/yapit">yapit</a></span>    - TTS for documents, papers, and web pages <a href="https://yapit.md"><img src="https://img.shields.io/badge/yapit.md-4A5568?style=flat&logo=firefox&logoColor=white" alt="Website"></a> <a href="#"><img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB" alt="React"></a> <a href="#"><img src="https://img.shields.io/badge/FastAPI-005571?logo=fastapi" alt="FastAPI"></a></details><details><summary><picture><img src="/cards/term/prompt-tree-tools.svg" alt="$ tree tools/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-tools.svg" alt="tools/" align="absbottom"></picture>
+  ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/dotfiles">dotfiles</a></span>    - system config and utility scripts <a href="#"><img src="https://img.shields.io/badge/Nix-5277C3?logo=nixos&logoColor=fff" alt="Nix"></a> <a href="#"><img src="https://img.shields.io/badge/Neovim-57A143?logo=neovim&logoColor=fff" alt="Neovim"></a> <a href="#"><img src="https://img.shields.io/badge/Zsh-F15A24?logo=zsh&logoColor=fff" alt="Zsh"></a>
+  ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/agents">agents</a></span>      - prompts and plugins for agents <a href="#"><img src="https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff" alt="Claude"></a> <a href="https://pi.dev"><img src="https://img.shields.io/badge/Pi-20232A?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjE2NSAxNjUgNDcwIDQ3MCI+PHBhdGggZmlsbD0iI0YwOTA4MiIgZD0iTTE2NS4yOSAxNjUuMjlINTE3LjM2VjQwMEg0MDBWMjgyLjY1SDE2NS4yOVoiLz48cGF0aCBmaWxsPSIjNEQ5QUJGIiBkPSJNMTY1LjI5IDI4Mi42NUgyODIuNjVWNDAwSDQwMFY1MTcuMzZIMjgyLjY1VjYzNC43MkgxNjUuMjlaIi8+PHBhdGggZmlsbD0iI0YxQkU1OCIgZD0iTTUxNy4zNiA0MDBINjM0LjcyVjYzNC43Mkg1MTcuMzZaIi8+PC9zdmc+Cg==" alt="Pi"></a>
+  ┣━━ <picture><img src="/cards/term/dir-2026.svg" alt="2026/" align="absbottom"></picture>
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/clankr">clankr</a></span>      - run coding agents in isolated Docker containers <a href="https://pypi.org/project/clankr/"><img src="https://img.shields.io/badge/PyPI-3775A9?logo=pypi&logoColor=fff" alt="PyPI"></a> <a href="#"><img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff" alt="Docker"></a> <a href="#"><img src="https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff" alt="Claude"></a>
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/yapit-tts/yapit-cli">yapit-cli</a></span>   - clean markdown from URLs and documents <a href="https://pypi.org/project/yapit-cli/"><img src="https://img.shields.io/badge/PyPI-3775A9?logo=pypi&logoColor=fff" alt="PyPI"></a>
+  ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/gitplot">gitplot</a></span>     - git history visualizations <a href="https://pypi.org/project/gitplot/"><img src="https://img.shields.io/badge/PyPI-3775A9?logo=pypi&logoColor=fff" alt="PyPI"></a>
+  ┗━━ <picture><img src="/cards/term/dir-2025.svg" alt="2025/" align="absbottom"></picture>
+      ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/memex">memex</a></span>       - semantic search + graph traversal for markdown vaults <a href="https://pypi.org/project/memex-md/"><img src="https://img.shields.io/badge/PyPI-3775A9?logo=pypi&logoColor=fff" alt="PyPI"></a></details><details><summary><picture><img src="/cards/term/prompt-tree-open-source.svg" alt="$ tree open-source/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-open-source.svg" alt="open-source/" align="absbottom"></picture>
+  ┣━━ <picture><img src="/cards/term/dir-2026.svg" alt="2026/" align="absbottom"></picture>
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/kepano/defuddle/pulls?q=author%3AMaxWolf-01">defuddle</a></span>                - 5 merged fixes, ~20 fixed bug reports
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/copyous">copyous</a></span> (fork)          - GNOME clipboard: 11× faster unlock, leak 766 → 7 MiB
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/thedotmack/claude-mem/issues/646">claude-mem</a></span>              - reported a crash that bricked Claude Code (fixed)
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/NixOS/nixpkgs/issues/500852">nixpkgs</a></span>                 - reported pihole blocklists failing to load (fixed)
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/boxed/mutmut/issues/578">mutmut</a></span>                  - reported async tests recorded as timeouts (fixed)
+  ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/Jotham-LEC/greyline/issues/13">greyline</a></span>                - reported a broken Home Manager module (fixed)
+  ┣━━ <picture><img src="/cards/term/dir-2025.svg" alt="2025/" align="absbottom"></picture>
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/lucidrains/x-transformers/pull/307">x-transformers</a></span>          - fix inp_inject ignored with in_attn_cond
+  ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/PrimeIntellect-ai/verifiers/issues/327">verifiers</a></span>               - reported RubricGroup ignoring parsers (fixed)
+  ┣━━ <picture><img src="/cards/term/dir-2024.svg" alt="2024/" align="absbottom"></picture>
+  ┃   ┣━━ <span style="font-weight: bold"><a href="https://github.com/tinygrad/tinygrad/pull/3621">tinygrad</a></span>                - Tensor.inference_mode(); test for a setitem bug
+  ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/Pierrad/obsidian-github-copilot/issues/36">obsidian-github-copilot</a></span> - reported a daily forced re-sign-in (fixed)
+  ┗━━ <picture><img src="/cards/term/dir-2022.svg" alt="2022/" align="absbottom"></picture>
+      ┗━━ <span style="font-weight: bold"><a href="https://github.com/nagadit/DeepFaceLab_Linux/pull/68">DeepFaceLab_Linux</a></span>       - added export scripts</details><details><summary><picture><img src="/cards/term/prompt-tree-fun.svg" alt="$ tree fun/" align="absbottom"></picture></summary>  <picture><img src="/cards/term/dir-fun.svg" alt="fun/" align="absbottom"></picture>
+  ┣━━ <span style="font-weight: bold"><a href="https://gist.github.com/MaxWolf-01/6ecd0ef197fc239bca818a4266f0cb17">Obsidian Homepage</a></span>  - daily-note stats visualization <a href="#"><img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000" alt="JavaScript"></a> <a href="#"><img src="https://img.shields.io/badge/Obsidian-%23483699.svg?&logo=obsidian&logoColor=white" alt="Obsidian"></a>
+  ┣━━ <picture><img src="/cards/term/dir-2025.svg" alt="2025/" align="absbottom"></picture>
+  ┃   ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/aleator">aleator</a></span>        - RNG-based habit formation app <a href="#"><img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB" alt="React"></a> <a href="#"><img src="https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white" alt="TypeScript"></a> <a href="#"><img src="https://img.shields.io/badge/FastAPI-005571?logo=fastapi" alt="FastAPI"></a>
+  ┗━━ <picture><img src="/cards/term/dir-2021.svg" alt="2021/" align="absbottom"></picture>
+      ┣━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/TruthTabler">TruthTabler</a></span>    - boolean expression parser + simplifier <a href="#"><img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff" alt="Python"></a>
+      ┗━━ <span style="font-weight: bold"><a href="https://github.com/MaxWolf-01/2048JavaFx-Bot">2048JavaFx-Bot</a></span> - 2048 with parallel expectimax bot <a href="#"><img src="https://img.shields.io/badge/Java-%23ED8B00.svg?logo=openjdk&logoColor=white" alt="Java"></a></details><picture><img src="/cards/term/prompt-card.svg" alt="$ uv run cards/card.py" align="absbottom"></picture>
+<picture><img src="/cards/activity.svg" alt="Max's GitHub activity: contributions per month since 2020, a summary, and the last 90 days"></picture>
+<picture><img src="/cards/term/prompt-idle.svg" alt="$" align="absbottom"></picture>
 </pre>
-
-<div align="center">
-  <img src="/github-metrics.svg" alt="Metrics">
-</div>
