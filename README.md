@@ -1,3 +1,15 @@
+<!--
+Editing this README:
+- Images go inside <picture>. GitHub wraps a bare image in a link to its file, so a
+  click on a prompt would open the SVG instead of its fold.
+- Inside <pre>, a line break right after </summary> or right before </details> renders
+  as a blank line: keep each fold's tags on the lines they close.
+- The prompt, directory and tag images are drawn for the profile page's 11.9px code
+  text and come from cards/prompt.py; edit COMMANDS, DIRS, TAGS or COMMENTS there and
+  run `uv run cards/prompt.py --live`.
+- Lines have to fit the code block at a 1280px window (806px of content), or it scrolls.
+- The activity card is cards/activity.svg, redrawn weekly by .github/workflows/card.yml.
+-->
 <h3 align="center">Hi, I'm Max 👋</h3>
 <p align="center">
   I'm exploring biologically inspired, self-organizing systems and open-ended learning — interested in creating artificial life capable of lifelong learning, and autonomous exploration.

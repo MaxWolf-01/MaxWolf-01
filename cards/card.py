@@ -62,8 +62,11 @@ FOLDER = {
     "research": {"grax", "LNDP", "neat", "multi-agent-transformer", "sentinel2-landcover-classification",
                  "es-torch", "evochi", "x-transformers", "SuperSuit", "csv_qa", "x-evolution", "LAPO",
                  "hls-foundation-os", "evolving_ideas"},
-    "apps": {"yapit", "aleator", "higgs-audio", "markxiv"},
+    # The README's fun/ projects count as apps: small apps, one layer fewer to tell apart.
+    "apps": {"yapit", "aleator", "higgs-audio", "markxiv", "TruthTabler", "2048JavaFx-Bot"},
 }
+# Max's own repos made for school, counted with the school accounts' work.
+SCHOOL_REPOS = {"TinfProject-2nd-Semester", "DBI-Mockdata", "dbi-vergleichsprojekt"}
 # Notebooks are mostly stored output.
 NOT_WRITTEN = {"Jupyter Notebook"}
 
@@ -358,6 +361,8 @@ def category(owner: str, name: str) -> str:
     if owner in PRIVATE:
         return "private"
     if owner in OWN:
+        if name in SCHOOL_REPOS:
+            return "school"
         return next((f for f, names in FOLDER.items() if name in names), "tools")
     return "open source"
 
@@ -390,6 +395,7 @@ AREA_INK = {
     "school": ("#a39a74", "#635a42"),
     "private": ("#ebe4d8", "#332f2a"),
 }
+HATCH = ("#8a7f5c", "#a0906a")  # the school layer's stripes, light and dark
 INK = {  # role: (light, dark)
     "muted": ("#5e5650", "#b0a89e"),
     "body": ("#37261d", "#ede3d2"),
@@ -417,7 +423,11 @@ def stylesheet(text: str) -> str:
     faces = "".join(font_face(HERE / "fonts" / f"IBMPlexMono-{w}.woff2", wt, text)
                     for w, wt in (("Regular", 400), ("Medium", 500)))
     return (f"{faces} text {{ font-family: 'Plex', ui-monospace, monospace; font-variant-numeric: tabular-nums }} "
-            f".h {{ font-weight: 500 }} {rules(0)} @media (prefers-color-scheme: dark) {{ {rules(1)} }}")
+            f".h {{ font-weight: 500 }} {rules(0)} @media (prefers-color-scheme: dark) {{ {rules(1)} }}"
+            # School is hatched over its own colour, so it can't be read as the solid private layer beside it.
+            f" .hb {{ fill: {AREA_INK['school'][0]} }} .hs {{ stroke: {HATCH[0]} }}"
+            f" @media (prefers-color-scheme: dark) {{ .hb {{ fill: {AREA_INK['school'][1]} }} .hs {{ stroke: {HATCH[1]} }} }}"
+            " .a-school { fill: url(#school) }")
 
 
 def font_face(path: Path, weight: int, text: str) -> str:
@@ -492,6 +502,9 @@ def activity(c: Canvas, d: dict, today: dt.date, y: float) -> float:
         # Whatever the calendar counts beyond the named layers is private work.
         per[m]["private"] += max(totals[m] - sum(per[m].values()), 0)
 
+    c.add('<defs><pattern id="school" patternUnits="userSpaceOnUse" width="4" height="4" patternTransform="rotate(45)">'
+          '<rect width="4" height="4" class="hb"/><line x1="0" y1="0" x2="0" y2="4" class="hs" stroke-width="1.5"/>'
+          '</pattern></defs>')
     heading(c, y, "activity", f"contributions per month since {created:%B %Y}".lower())
     # Legend.
     x, ly = X0, y + FIRST_ROW
