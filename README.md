@@ -12,7 +12,7 @@ Editing this README:
 -->
 <h3 align="center">Hi, I'm Max 👋</h3>
 <p align="center">
-  I'm exploring biologically inspired, self-organizing systems and open-ended learning — interested in creating artificial life capable of lifelong learning, and autonomous exploration.
+  I'd describe myself as an interdisciplinary researcher, particularly interested in biologically inspired, self-organizing systems and open-ended learning. When I'm not doing research, I like building tools for learning and automation.
 </p>
 
 <pre>
